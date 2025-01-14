@@ -1,6 +1,6 @@
 ## GATK Pipeline
 
-Genome Analysis ToolKit. This has also been run by many others in lab - Alyssa, Devon, and Jody - these scripts are modified for Anolis distichus.
+Genome Analysis ToolKit. This has also been run by many others in lab, but these scripts are modified for Anolis distichus.
 
 GATK is based off of the Illumina Hi-C / Omni-C reads. To start, you need a .bam file. Minimap makes a bam file from PacBio reads, this is **not** the .bam file you are looking for. It is necessary to generate a **new** .bam file.
 
