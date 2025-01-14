@@ -1,5 +1,6 @@
 # Assembling Anolis distichus genome
 ## With PACBIO long reads and Omni-C Hi-C Data
+## Using the Rutgers OARC Amarel Computing Cluster
 ### Cleo Falvey
 ---
 
