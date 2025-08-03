@@ -10,8 +10,6 @@ library(ggplot2)
 
 # grep '^#\|missense_variant\|synonymous_variant' annotated_vcf.vcf > mis_syn.txt
 
-setwd("C:/Users/chfal/OneDrive/Desktop/Distichus_stuff/sliding_window")
-
 # read data
 miss_syn <- read.delim("miss_syn.txt", sep = c("\t"))
 
@@ -61,7 +59,7 @@ final_miss_syn_filtered <-final_miss_syn[final_miss_syn$X.CHROM %in% c("scaffold
 ka_ks_plot <- ggplot(final_miss_syn_filtered,aes(y=chr_type,x=ka_ks, fill=chr_type)) +
   stat_summary(fun="mean",geom="crossbar",color="black") +
   scale_fill_manual(values=colors) +
-    geom_violin() +
+  geom_violin() +
   labs(x="Nonsynonymous to Synonymous Substitution Ratio Distribution", y=NULL) +
   scale_y_discrete(limits=c("Autosome","X1","X2","Y")) +
   theme(legend.position = "none") +
@@ -74,6 +72,8 @@ ka_ks_plot <- ggplot(final_miss_syn_filtered,aes(y=chr_type,x=ka_ks, fill=chr_ty
 
 ka_ks_plot
 
+ggsave("ka_ks.png",ka_ks_plot,width=5, height=3)
+
 ## Statistical tests Ka/Ks ####
 
 # get vectors of X1, X2, and Y
@@ -81,6 +81,14 @@ ancient_x <- final_miss_syn_filtered %>% filter(chr_type=="X1")
 neo_x <- final_miss_syn_filtered %>% filter(chr_type=="X2")
 y <- final_miss_syn_filtered %>% filter(chr_type=="Y")
 autosomes <- final_miss_syn_filtered %>% filter(chr_type=="Autosome")
+
+median(autosomes$ka_ks)
+
+median(ancient_x$ka_ks)
+
+median(neo_x$ka_ks)
+
+median(y$ka_ks)
 
 # compare X1 to autosomes, x1 is higher than autosomes
 wilcox.test(ancient_x$ka_ks,autosomes$ka_ks,"greater")
@@ -90,4 +98,3 @@ wilcox.test(neo_x$ka_ks,autosomes$ka_ks,"greater")
 
 # compare y to autosomes, y is higher than autosomes
 wilcox.test(y$ka_ks,autosomes$ka_ks,"greater")
-

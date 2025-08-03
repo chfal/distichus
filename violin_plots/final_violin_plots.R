@@ -80,7 +80,7 @@ final_te_violin <- ggplot(final_te_1mb_filtered,
 # display plot in viewer
 plot(final_te_violin)
 
-ggsave("final_te_violin.pdf",final_te_violin, width=5, height=3)
+ggsave("final_te_violin.png",final_te_violin, width=5, height=3)
 
 ## Gene Density Plot ####
 
@@ -115,7 +115,7 @@ gene_violin <- ggplot(AnoDis_gene_1mb_filtered,
 plot(gene_violin)
 
 # save plot to working directory
-ggsave("gene_violin.pdf",gene_violin, width=5, height=3)
+ggsave("gene_violin.png",gene_violin, width=5, height=3)
 
 ## SNPEFF Read in Data ####
 
@@ -214,7 +214,7 @@ plot(final_snpeff_violin)
 
 
 # save plot to working directory
-ggsave("snpeff_violin.pdf",final_snpeff_violin, width=5, height=3)
+ggsave("snpeff_violin.png",final_snpeff_violin, width=5, height=3)
 
 
 ## Statistical Tests ####
@@ -233,6 +233,10 @@ gene_x2 <- filter(AnoDis_gene_1mb_filtered, chr_type=="X2") %>%
 gene_y <- filter(AnoDis_gene_1mb_filtered, chr_type=="Y") %>%
   select(bp_count)
 
+median(gene_autosome$bp_count)
+median(gene_x1$bp_count)
+median(gene_x2$bp_count)
+median(gene_y$bp_count)
 
 # wilcox test:wilcox.test(the one you think is less, the one that you think is greater, "less")
 # p-value will be in support of it being less
@@ -264,6 +268,11 @@ te_x2 <- filter(final_te_1mb_filtered, chr_type=="X2") %>%
 te_y <- filter(final_te_1mb_filtered, chr_type=="Y") %>%
   select(bp_count)
 
+median(te_autosome$bp_count)
+median(te_x1$bp_count)
+median(te_x2$bp_count)
+median(te_y$bp_count)
+
 # there are less TEs on the y than there are on Autosomes
 wilcox.test(te_y$bp_count,te_autosome$bp_count,"less")
 
@@ -271,7 +280,7 @@ wilcox.test(te_y$bp_count,te_autosome$bp_count,"less")
 # there are less tes on the ancient x than there are on autosomes
 wilcox.test(te_x1$bp_count, te_autosome$bp_count, "less")
 
-# there are more TEs on the neo X than there are on autosomes
+# there are more TEs on the neo X than there are on autosomes but this is not significantly different
 wilcox.test(te_x2$bp_count, te_autosome$bp_count, "greater")
 
 
@@ -296,3 +305,47 @@ wilcox.test(snp_eff_x1$bp_count,snp_eff_autosome$bp_count, "less")
 wilcox.test(snp_eff_x2$bp_count,snp_eff_autosome$bp_count, "less")
 
 wilcox.test(snp_eff_y$bp_count,snp_eff_autosome$bp_count, "less")
+
+
+## Sandbox ####
+
+X1_TEs <- filter(final_te_1mb_filtered, chr_type=="X1") %>%
+  ggplot(aes(x=start,y=bp_count)) +
+  geom_point(color="#EE2A7B") +
+  labs(x="position", y="TE count in X1") +
+  theme_bw()
+
+
+X2_TEs <- filter(final_te_1mb_filtered, chr_type=="X2") %>%
+ggplot(aes(x=start,y=bp_count)) +
+  geom_point(color="#A4509F") +
+  labs(x="position", y="TE count in X2") +
+  theme_bw()
+
+
+Y1_TEs <- filter(final_te_1mb_filtered, Scaffold==13) %>%
+  ggplot(aes(x=start,y=bp_count)) +
+  geom_point(color="#00AEEF") +
+  labs(x="position", y="TE count in Scaffold 13 (Y)") +
+  theme_bw()
+
+Y2_TEs <- filter(final_te_1mb_filtered, Scaffold==16) %>%
+  ggplot(aes(x=start,y=bp_count)) +
+  geom_point(color="#00AEEF") +
+  labs(x="position", y="TE count in Scaffold 16 (Y)") +
+  theme_bw()
+
+
+Autosomal_TEs <- Y_TEs <- filter(final_te_1mb_filtered, chr_type=="Autosome") %>%
+  ggplot(aes(x=start,y=bp_count)) +
+  geom_point(color="#006838") +
+  labs(x="position", y="TE count in Autosome") +
+  theme_bw()
+
+big_plot <- plot_grid(X1_TEs,X2_TEs,Y1_TEs,Y2_TEs,ncol=2, labels=c("A","B","C","D"))
+
+
+
+big_plot
+
+ggsave("TE_plot.png", big_plot, width=8, height=8)

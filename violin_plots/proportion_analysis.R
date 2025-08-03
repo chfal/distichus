@@ -90,7 +90,7 @@ proportion_violin <- ggplot(no_zeroes_df_filtered,aes(x=proportion,y=as_factor(c
 proportion_violin
 
 
-ggsave("proportion_violin.pdf",proportion_violin, width=5, height=3)
+ggsave("proportion_violin.png",proportion_violin, width=5, height=3)
 
 
 ## Filtering for statistics
@@ -107,7 +107,13 @@ snp_eff_x2_prop <- filter(no_zeroes_df_filtered, chr_type=="X2") %>%
 snp_eff_y_prop <- filter(no_zeroes_df_filtered, chr_type=="Y") %>%
   select(proportion)
 
+median(snp_eff_autosome_prop$proportion, na.rm=T)
 
+median(snp_eff_x1_prop$proportion, na.rm=T)
+
+median(snp_eff_x2_prop$proportion, na.rm=T)
+
+median(snp_eff_y_prop$proportion, na.rm=T)
 ## Tests
 
 # X1 has a higher proportion of effects than autosomes does
